@@ -49,6 +49,24 @@ setInterval(() => {
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// --- Health Check (diagnose Supabase connection) ---
+app.get('/api/health', async (req, res) => {
+  const checks = { server: 'OK', supabase_url: !!SUPABASE_URL, supabase_key: !!SUPABASE_KEY };
+  try {
+    const { data, error } = await supabase.from('blocks').select('id', { count: 'exact', head: true });
+    if (error) {
+      checks.database = 'ERROR: ' + error.message;
+      checks.hint = error.hint || null;
+      checks.code = error.code || null;
+    } else {
+      checks.database = 'OK';
+    }
+  } catch (err) {
+    checks.database = 'EXCEPTION: ' + err.message;
+  }
+  res.json(checks);
+});
+
 // --- API Routes ---
 
 // Get all blocks
