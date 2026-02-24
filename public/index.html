@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messages from Normies</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><rect width='10' height='10' fill='%23fff'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <h1 class="title">MESSAGES FROM NORMIES</h1>
+      <p class="subtitle">LEAVE YOUR MARK ON THE WALL</p>
+      <p class="counter" id="counter"></p>
+    </header>
+
+    <!-- Wall -->
+    <main class="wall" id="wall">
+      <div class="loading" id="loading">
+        <div class="loading-bricks">
+          <div class="loading-brick"></div>
+          <div class="loading-brick"></div>
+          <div class="loading-brick"></div>
+        </div>
+        <p>LOADING WALL...</p>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Powered by <a href="https://x.com/OsayKancuno" target="_blank" rel="noopener">@OsayKancuno</a></p>
+    </footer>
+  </div>
+
+  <!-- FAB Button -->
+  <button class="fab" id="addBtn" title="Tag the Wall">+</button>
+
+  <!-- Add Tag Modal -->
+  <div class="overlay hidden" id="addModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>TAG THE WALL</h2>
+        <button class="close-btn" id="closeAdd">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- Normie ID Field -->
+        <div class="field">
+          <label for="normieInput">NORMIE ID</label>
+          <input type="number" id="normieInput" min="0" max="9999" placeholder="0 - 9999">
+          <div class="preview hidden" id="preview">
+            <img id="previewImg" src="" alt="Normie Preview">
+            <span id="previewName"></span>
+          </div>
+          <div class="field-info hidden" id="editInfo"></div>
+          <div class="field-error hidden" id="previewError"></div>
+        </div>
+
+        <!-- Message Field -->
+        <div class="field">
+          <label for="messageInput">YOUR TAG</label>
+          <input type="text" id="messageInput" maxlength="100" placeholder="Leave your mark...">
+          <div class="char-count"><span id="charCount">0</span>/100</div>
+        </div>
+
+        <!-- Note -->
+        <div class="field-note">
+          Each Normie gets one spot on the wall.<br>
+          You can edit your message up to 5 times,<br>
+          then it becomes permanent.
+        </div>
+
+        <!-- Submit -->
+        <div class="field">
+          <button class="btn-primary" id="submitBtn" disabled>PLACE ON WALL</button>
+          <div class="field-error hidden" id="submitError"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Modal -->
+  <div class="overlay hidden" id="detailModal">
+    <div class="modal modal-detail">
+      <button class="close-btn close-btn-detail" id="closeDetail">&times;</button>
+      <div class="detail-content" id="detailContent"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
