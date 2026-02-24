@@ -20,8 +20,6 @@ if (!SUPABASE_URL || !SUPABASE_KEY) {
   process.exit(1);
 }
 
-console.log(`  Supabase URL: ${SUPABASE_URL.substring(0, 30)}...`);
-
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // --- Rate Limiting (in-memory) ---
@@ -50,45 +48,6 @@ setInterval(() => {
 // --- Middleware ---
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
-
-// --- Health Check (diagnose Supabase connection) ---
-app.get('/api/health', async (req, res) => {
-  const checks = {
-    server: 'OK',
-    supabase_url_set: !!SUPABASE_URL,
-    supabase_url_preview: SUPABASE_URL ? SUPABASE_URL.substring(0, 35) + '...' : 'MISSING',
-    supabase_key_set: !!SUPABASE_KEY,
-    supabase_key_length: SUPABASE_KEY ? SUPABASE_KEY.length : 0
-  };
-
-  // Test raw fetch to Supabase
-  try {
-    const rawRes = await fetch(`${SUPABASE_URL}/rest/v1/blocks?select=id&limit=1`, {
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`
-      }
-    });
-    checks.raw_fetch = `Status ${rawRes.status}`;
-  } catch (err) {
-    checks.raw_fetch = `FAILED: ${err.message}`;
-    if (err.cause) checks.raw_fetch_cause = String(err.cause);
-  }
-
-  // Test Supabase client
-  try {
-    const { data, error } = await supabase.from('blocks').select('id', { count: 'exact', head: true });
-    if (error) {
-      checks.database = 'ERROR: ' + error.message;
-    } else {
-      checks.database = 'OK';
-    }
-  } catch (err) {
-    checks.database = 'EXCEPTION: ' + err.message;
-  }
-
-  res.json(checks);
-});
 
 // --- API Routes ---
 
