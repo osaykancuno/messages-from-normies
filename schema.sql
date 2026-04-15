@@ -8,8 +8,11 @@ CREATE TABLE blocks (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- Disable Row Level Security (the server handles all access control)
-ALTER TABLE blocks DISABLE ROW LEVEL SECURITY;
+-- Enable Row Level Security. No policies are defined, so public (anon) access
+-- is denied entirely. The Node server must use the SERVICE_ROLE key, which
+-- bypasses RLS, and is the sole gateway to this table — all access control
+-- (rate limiting, validation, edit limits) is enforced in server.js.
+ALTER TABLE blocks ENABLE ROW LEVEL SECURITY;
 
 -- Index for fast lookups by normie_id
 CREATE INDEX idx_blocks_normie_id ON blocks (normie_id);
